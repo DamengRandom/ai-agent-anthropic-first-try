@@ -18,6 +18,33 @@ const weatherTool = tool(async ({ query }) => {
   }),
 });
 
+const jsExecutor = tool(async ({ code }) => {
+  console.log("-------------Before code executed---------------");
+  const response = await fetch(process.env.EXECUTOR_URL, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ code }),
+  });
+  console.log("-------------After code executed----------------");
+
+  const result = await response.json();
+
+  return result;
+}, {
+  name: "run_javascript_code_tool",
+  description: `
+    Run general purpose javascript code.
+    This can be used to access Internet or do any computation that you need.
+    The output will be composed of the stdout and stderr.
+    The code should be written in a way that it can be executed with javascript eval in node environment.
+  `,
+  schema: z.object({
+    code: z.string().describe('The code to run'),
+  })
+});
+
 const model = new ChatAnthropic({
   modelName: "claude-3-5-sonnet-20241022",
   anthropicApiKey: process.env.ANTHROPIC_API_KEY,
@@ -27,7 +54,7 @@ const checkpointSaver = new MemorySaver(); // adding some memory functionality f
 
 export const agent = createReactAgent({
   llm: model,
-  tools: [weatherTool], // could access database,
+  tools: [weatherTool, jsExecutor], // could access database, run js code
   checkpointSaver
 });
 

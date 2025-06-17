@@ -1,7 +1,6 @@
 import express from 'express';
 import cors from 'cors';
 import { agent } from './agent.js';
-import { v4 as uuidV4 } from 'uuid';
 
 const app = express();
 const port = 8723;
@@ -15,13 +14,13 @@ app.get('/', (req, res) => {
 
 app.post('/generate', async (req, res) => {
   try {
-    const { prompt } = req.body;
+    const { prompt, userId } = req.body;
     const result = await agent.invoke({
       messages: [{
         role: 'user',
         content: prompt,
       }]
-    }, { configurable: { thread_id: uuidV4() } });
+    }, { configurable: { thread_id: userId } });
 
     res.json(result?.messages?.at(-1)?.content);
   } catch (error) {
