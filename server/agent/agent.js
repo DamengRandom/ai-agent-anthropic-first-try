@@ -16,7 +16,7 @@ const weatherTool = tool(async ({ query }) => {
   schema: z.object({
     query: z.string().describe('The query to use in search'),
   }),
-});
+}); // can be treated as task 1 agent
 
 const jsExecutor = tool(async ({ code }) => {
   console.log("-------------Before code executed---------------");
@@ -43,7 +43,7 @@ const jsExecutor = tool(async ({ code }) => {
   schema: z.object({
     code: z.string().describe('The code to run'),
   })
-});
+}); // can be treated as task 2 agent
 
 const model = new ChatAnthropic({
   modelName: "claude-3-5-sonnet-20241022",

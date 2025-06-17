@@ -14,13 +14,13 @@ app.get('/', (req, res) => {
 
 app.post('/generate', async (req, res) => {
   try {
-    const { prompt, userId } = req.body;
+    const { prompt, threadId } = req.body;
     const result = await agent.invoke({
       messages: [{
         role: 'user',
         content: prompt,
       }]
-    }, { configurable: { thread_id: userId } });
+    }, { configurable: { thread_id: threadId } });
 
     res.json(result?.messages?.at(-1)?.content);
   } catch (error) {
