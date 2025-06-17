@@ -25,29 +25,31 @@ const model = new ChatAnthropic({
 
 const checkpointSaver = new MemorySaver(); // adding some memory functionality for the agent to memorize the contexts ~
 
-const agent = createReactAgent({
+export const agent = createReactAgent({
   llm: model,
   tools: [weatherTool], // could access database,
   checkpointSaver
 });
 
-const result = await agent.invoke({
-  messages: [{
-    role: 'user',
-    content: "Whats the weather in Jinan?",
-  }]
-}, {
-  configurable: { thread_id: 42 }
-});
+// below code is mocking the user to ask agent questions 
 
-const followUp = await agent.invoke({
-  messages: [{
-    role: 'user',
-    content: "What city is that for?",
-  }]
-}, {
-  configurable: { thread_id: 42 }
-});
+// const result = await agent.invoke({
+//   messages: [{
+//     role: 'user',
+//     content: "Whats the weather in Jinan?",
+//   }]
+// }, {
+//   configurable: { thread_id: 42 }
+// });
 
-console.log("Result: ", result?.messages?.at(-1).content);
-console.log("Follow up: ", followUp?.messages?.at(-1).content);
+// const followUp = await agent.invoke({
+//   messages: [{
+//     role: 'user',
+//     content: "What city is that for?",
+//   }]
+// }, {
+//   configurable: { thread_id: 42 }
+// });
+
+// console.log("Result: ", result?.messages?.at(-1).content);
+// console.log("Follow up: ", followUp?.messages?.at(-1).content);
